@@ -74,7 +74,7 @@ int readData(vector<v*> &V, string filename) {			// return number of data read
 
 int** buildMatrix(vector<v*> V, int n)
 {
-	int ** D = new int* [n];
+	int ** D = new int* [n];		//intializing matrix
 	for (int r = 0; r < n; r++)
 	{
 		D[r] = NULL;
@@ -399,3 +399,4 @@ void _vectorTrim(vector<v*> &V , int n)
 	V.resize(n);							// trim off the empty slots
 	cout << "[!] V trimmed, capacity is now [" << V.capacity() << "], containing [" << n << "] elements." << endl;
 }
+

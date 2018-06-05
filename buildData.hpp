@@ -8,9 +8,10 @@ struct v {
 	int x;				
 	int y;
 	vector<v*> adjacent;	// adjacent nodes, the first element is a pointer to the parent. 
-	int key;				// distance from prevoius (cost) 	
+	int key;				// distance from previous (cost)
 	bool _isInQueue;		
 	bool _isInMST;
+	bool _isInPM;
 };
 
 int readData(vector<v*> &, string);					// return number of data read

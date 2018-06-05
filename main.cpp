@@ -22,6 +22,8 @@ int main(int argc, char* argv[]) {
 	int ** Distances = buildMatrix(Vertices, n);
 	_printDistanceMatrix(Distances, n);
 	buildMST(Vertices, Distances, n);
+	perfectMatching(Vertices, Distances, n);
+
 
 	cout << "\n- Output Data ----------------------------- " << endl;
 
