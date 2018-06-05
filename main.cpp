@@ -2,41 +2,41 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	string filename = argv[1];
-	vector<v*> Vertices;
+	string filename = argv[1];					// Filename of input 
+	vector<v*> Vertices;						// Container for cities, v is a struct (see buildData.hpp)
+	int n = 0;									// Number of cities
+	int ** Distances = NULL;					// Matrix for distances between cities
 
 	cout << "\n- Reading Data --------------------------- " << endl;
-
-	int n = 0;
-	n = readData(Vertices, filename);
-	if (n < 1) 
-		cout << "ERROR: readData() read no data." << endl;
-	else 
-		cout << "Read from \"" << filename << "\" | # of cities: [" << n << "]" << endl;
+	
+		n = readData(Vertices, filename);
  
 	cout << "\n- Building Data --------------------------- " << endl;
-	int ** Distances = buildMatrix(Vertices, n);
-	_printDistanceMatrix(Distances, n);
-	buildMST(Vertices, Distances, n);
+	
+		Distances = buildMatrix(Vertices, n);
+		buildMST(Vertices, Distances, n);
 
-	cout << "\n- Output Data ----------------------------- " << endl;
+/**//* Optional -------------------------------------------------------------------------------------- */
+/**/
+/**/	cout << "\n- Output Data ----------------------------- " << endl;
+/**/	
+/**/		_printDistanceMatrix(Distances, n, "outputDistanceMatrix.txt");			// take away the string argument to print to screen							
+/**/		printMSTLinklist(Vertices, n);
+/**/		printMSTMatrix(Vertices, n, "outputMST.txt");							// take away the string argument to print to screen
+/**/
+/**//*--------------------------------------------------------------------------------------------------*/
 
-	printMSTLinklist(Vertices, n);
-	printMSTMatrix(Vertices, n, "outputMST.txt");							// take away the string argument to print to screen
+	cout << "\n- Clean up Data --------------------------- " << endl;
 
-	cout << "\n------------------------------------------- " << endl;
-
-
+		clean_D(Distances, n);
+		clean_V(Vertices);
 
 
 
-	/* clean up remark
-		D is a 2D dynamic array
-		V is a dynamic array
-	*/
 	return 0;
 }

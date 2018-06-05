@@ -12,19 +12,32 @@ struct v {
 	bool _isInQueue;		
 	bool _isInMST;
 };
+/* Main Procedures */
+int readData(vector<v*> &, string);					// Fill container with dynamically allocated vertices, store data, and return number of data read
+int** buildMatrix(vector<v*>, int);					// Create and return a 2D int matrix filled with distances between cities
+void buildMST(vector<v*> &, int ** , int);			// Create an MST by pointing verticies in the "adjacent" list of each vertex
 
-int readData(vector<v*> &, string);					// return number of data read
-int** buildMatrix(vector<v*>, int);
-void buildMST(vector<v*> &, int ** , int);
-void _removeLink(vector<v*> &, v*);
-void _vectorResize(vector<v*> &, int);
-void _vectorTrim(vector<v*> &, int);
-v* _getMinKey(vector<v*> &);
-void _addToQueue(vector<v*> &, v*);
-void _printV(vector<v*>);
-void _printThisV(v*);
-void _printQ(vector<v*>);
-void _printDistanceMatrix(int **, int);
-void printMSTLinklist(vector<v*>, int);
-void printMSTMatrix(vector<v*>, int);
-void printMSTMatrix(vector<v*>, int, string);
+/* Public Functions */
+void printMSTLinklist(vector<v*>, int);				// Display MST in Link list format. The ID in [ ] is the parent. (Each vertex only has one parent)
+void printMSTMatrix(vector<v*>, int);				// Print MST in Matrix format to screen
+void printMSTMatrix(vector<v*>, int, string);		// Print MST in Matrix format to file 				(currently in use)
+void clean_D(int ** &, int);						// Clean up Matrix 
+void clean_V(vector<v*> &);							// Clean up Vertex struct
+
+/* Private Utility Functions */
+void _removeLink(vector<v*> &, v*);					// Remove certain child from the parent adjacent list, for updating min key occasions
+v* _getMinKey(vector<v*> &);						// Pop the min key from queue, queue must be sorted.
+void _addToQueue(vector<v*> &, v*);					// Add a vertex to queue, this keeps queue in sorted order, Max to Min
+
+/* Helper Functions */
+void _printV(vector<v*>);							// Print the whole vertex container in full detail
+void _printThisV(v*);								// Print one vertex in full detail
+void _printQ(vector<v*>);							// Print the vertex ID in Queue
+void _printDistanceMatrix(int **, int);				// Print 2D int Matrix of Distance data
+void _printDistanceMatrix(int **, int, string);		// Print 2D int Matrix of Distance data to file 	(currently in use)
+
+
+
+/* Unused functions */
+//void _vectorResize(vector<v*> &, int);
+//void _vectorTrim(vector<v*> &, int);
