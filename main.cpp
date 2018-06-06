@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
 		Distances = buildMatrix(Vertices, n);
 		buildMST(Vertices, Distances, n);
 		perfectMatching(Vertices, Distances);
+		find_tour(Vertices, 0, Distances);
 
 
 	//output timing

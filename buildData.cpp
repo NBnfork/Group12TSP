@@ -654,7 +654,7 @@ void _vectorTrim(vector<v*> &V , int n)
 
 //form Eulerian circuit from connected multigraph
 // params: pos is starting vertex id, tour is current tour being processed 
-vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
+vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 {
 	// make copy of adjacenylist
 	vector<v*> temp;
@@ -691,7 +691,7 @@ vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++)
 			{
-				if (pos == temp[neighpos]->adjacent[i]->id) {
+				if (pos == temp[neighpos]->adjacent[i]->id) {//TODO deal with first city which has no parent and will segfault here: adjacent[i]=NULL
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin()+i);
 					break;
 				}
@@ -716,7 +716,7 @@ vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
 }
 
 //make Eulerian circuit into hamiltonian circuit
-void make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
+void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 {
 	//set up indicators for visited, total dist = 0, current & next
 	const int vSize = tour.size();
@@ -752,10 +752,12 @@ void make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 
 int find_tour(vector<v*> V, int pos, int ** D)
 {
+	int pathLength;
+	vector<int> circuit;
 	//euler circuit
-	 euler(V, pos, circuit);
+	 _euler(V, pos, circuit);
 
-	make_hamilton(circuit, pathLength, D);
+	_make_hamilton(circuit, pathLength, D);
 
 	return pathLength;
 }
