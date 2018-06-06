@@ -20,6 +20,7 @@ int main(int argc, char* argv[]) {
 	
 		Distances = buildMatrix(Vertices, n);
 		buildMST(Vertices, Distances, n);
+		perfectMatching(Vertices, Distances);
 
 /**//* Optional -------------------------------------------------------------------------------------- */
 /**/
