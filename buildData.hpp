@@ -12,6 +12,11 @@ struct v {
 	bool _isInQueue;		
 	bool _isInMST;
 };
+
+/*Public Variables*/
+vector<int>circuit;
+int pathLength;
+
 /* Main Procedures */
 int readData(vector<v*> &, string);					// Fill container with dynamically allocated vertices, store data, and return number of data read
 int** buildMatrix(vector<v*>, int);					// Create and return a 2D int matrix filled with distances between cities
@@ -38,7 +43,10 @@ void _printQ(vector<v*>);							// Print the vertex ID in Queue
 void _printDistanceMatrix(int **, int);				// Print 2D int Matrix of Distance data
 void _printDistanceMatrix(int **, int, string);		// Print 2D int Matrix of Distance data to file 	(currently in use)
 
-
+/*Part 5 & 6 Functions*/
+vector<int> euler(vector<v*>, int, vector<int>&);
+void make_hamilton(vector<int> &, int &, int ** D);
+int find_tour(vector<v*> V, int pos, int ** D);
 
 /* Unused functions */
 //void _vectorResize(vector<v*> &, int);

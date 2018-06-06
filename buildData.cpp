@@ -650,3 +650,111 @@ void _vectorTrim(vector<v*> &V , int n)
 }
 
 */
+
+//form Eulerian circuit from connected multigraph
+// params: pos is starting vertex id, tour is current tour being processed 
+vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
+{
+	// make copy of adjacenylist
+	vector<v*> temp;
+
+	for (int i = 0; i < V.size(); i++)
+	{
+		v *thisV = V[i];
+		temp.push_back(V[i]);
+
+		for (int j = 0; j < thisV->adjacent.size(); j++)
+		{
+			temp[i]->adjacent[j] = thisV->adjacent[j];
+		}
+	}
+
+	//start with empty stack and empty circuit (tour vector)
+	std::stack<int> stk;
+
+	//repeat until current vertex has no neighbors(temp) and stack empty
+	while (!stk.empty() || temp[pos]->adjacent.size() > 0)
+	{
+		//if has neighbors...
+		if (temp[pos]->adjacent.size() > 0)
+		{
+			//add vertex to stack
+			stk.push(pos);
+
+			//take neighbor
+			v* neighbor = temp[pos]->adjacent.back();
+			int neighpos = neighbor->id;
+
+			//remove neighbor edge to current vertex
+			temp[pos]->adjacent.pop_back();
+
+			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++)
+			{
+				if (pos == temp[neighpos]->adjacent[i]->id) {
+					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin()+i);
+					break;
+				}
+				//set neighbor to current vertex
+				pos = neighpos;
+			}
+
+		}
+		//if doesn't have neighbors...
+		else {
+			//add vertex to circuit
+			tour.push_back(pos);
+			//remove last vertex from stack & set as current
+			int last = stk.top();
+			stk.pop();
+			pos = last;
+		}
+	}
+	//add current pos to end of tour
+	tour.push_back(pos);
+	return tour;
+}
+
+//make Eulerian circuit into hamiltonian circuit
+void make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
+{
+	//set up indicators for visited, total dist = 0, current & next
+	const int vSize = tour.size();
+	vector<bool> visited(vSize);
+
+	path_dist = 0;
+	int root = tour.front();
+	vector<int>::iterator curr = tour.begin();
+	vector<int>::iterator next = tour.begin() + 1;
+	visited[root] = true;
+
+	//while end of tour isn't reached yet
+	while (next != tour.end())
+	{
+		//if haven't visited next city, then go
+		if (!visited[*next])
+		{
+			//increase total distance by distance between current and next city
+			path_dist += D[*curr][*next];
+			curr = next;
+			visited[*curr] = true;
+			next = curr + 1;
+		}
+		else
+		{
+			//remove next city from tour
+			next = tour.erase(next);
+		}
+	}
+	//add distance from current and next to total distance
+	path_dist += D[*curr][*next];
+}
+
+int find_tour(vector<v*> V, int pos, int ** D)
+{
+	//euler circuit
+	 euler(V, pos, circuit);
+
+	make_hamilton(circuit, pathLength, D);
+
+	return pathLength;
+}
