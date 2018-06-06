@@ -8,6 +8,8 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <stack>
+
 using namespace std;
 /***************************************************************
 *
@@ -233,18 +235,19 @@ void buildMST(vector<v*> &V, int ** D, int n)
 ***************************************************************************/
 void perfectMatching(vector<v*> &V, int** D) {
 
-	int distance = INT32_MAX;    //for comparing distances
-	v *closest = NULL;
+
 	//make odds list
 	vector<v*> odds = _makeOddsList(V);
 	//while oddsList is not empty
 	while (!odds.empty()) {
+		int distance = INT32_MAX;    //for comparing distances
+		int closest; //for saving closest
 		int i; //index of next vertex
 		//loop through oddsList finding min distance
 		for (i = 1; i < odds.size(); ++i){
 			if (distance > D[odds.front()->id][odds[i]->id]){
 				distance = D[odds.front()->id][odds[i]->id];
-				closest = odds[i];
+				closest = i;
 			}
 		}
 		/*error checking */
@@ -252,9 +255,9 @@ void perfectMatching(vector<v*> &V, int** D) {
 			cout << "ERROR!! perfectMatching function broken, no match could be found" << endl;
 		}
 		//update adj lists, update oddsList
-		odds.front()->adjacent.push_back(closest);
-		closest->adjacent.push_back(odds.front());
-		odds.erase(odds.begin() + i - 1);
+		odds.front()->adjacent.push_back(odds[closest]);
+		odds[closest]->adjacent.push_back(odds.front());
+		odds.erase(odds.begin() + closest);
 		odds.erase(odds.begin());
 	}
 	cout << "/* Constructed perfect match graph */" << endl;
@@ -670,7 +673,7 @@ vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
 	}
 
 	//start with empty stack and empty circuit (tour vector)
-	std::stack<int> stk;
+	stack<int> stk;
 
 	//repeat until current vertex has no neighbors(temp) and stack empty
 	while (!stk.empty() || temp[pos]->adjacent.size() > 0)
@@ -748,7 +751,7 @@ void make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 	//add distance from current and next to total distance
 	path_dist += D[*curr][*next];
 }
-
+/*
 int find_tour(vector<v*> V, int pos, int ** D)
 {
 	//euler circuit
@@ -758,3 +761,4 @@ int find_tour(vector<v*> V, int pos, int ** D)
 
 	return pathLength;
 }
+*/

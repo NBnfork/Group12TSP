@@ -17,10 +17,35 @@ int main(int argc, char* argv[]) {
 		n = readData(Vertices, filename);
  
 	cout << "\n- Building Data --------------------------- " << endl;
-	
-		Distances = buildMatrix(Vertices, n);
-		buildMST(Vertices, Distances, n);
-		perfectMatching(Vertices, Distances);
+
+
+	//timing total
+	clock_t mainStart = clock();
+
+	//timing
+	clock_t start = clock();
+	Distances = buildMatrix(Vertices, n); //insert function here
+	clock_t end = clock();
+	double time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to build DMaxtrix: " << time << " secs" << std::endl;
+
+	//timing
+	start = clock();
+	buildMST(Vertices, Distances, n);
+	end = clock();
+	time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to build MST" << time << " secs" << std::endl;
+
+	//timing
+	start = clock();
+	perfectMatching(Vertices, Distances);
+	end = clock();
+	time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to add Perfect Matching: " << time << " secs" << std::endl;
+
+	clock_t mainEnd = clock();
+	time = (double) (mainEnd - mainStart) / CLOCKS_PER_SEC;
+	std::cout << "\nTotal running: " << time << " secs" << std::endl;
 
 /**//* Optional -------------------------------------------------------------------------------------- */
 /**/

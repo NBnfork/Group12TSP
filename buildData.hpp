@@ -14,8 +14,8 @@ struct v {
 };
 
 /*Public Variables*/
-vector<int>circuit;
-int pathLength;
+//vector<int>circuit;
+//int pathLength;
 
 /* Main Procedures */
 int readData(vector<v*> &, string);					// Fill container with dynamically allocated vertices, store data, and return number of data read
