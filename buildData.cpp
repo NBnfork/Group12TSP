@@ -233,7 +233,8 @@ void buildMST(vector<v*> &V, int ** D, int n)
   Eulerian circuit. In order increase the speed of our program
   this perfect matching algorithm will use a greedy approach.
 ***************************************************************************/
-void perfectMatching(vector<v*> &V, int** D) {
+void perfectMatching(vector<v*> &V, int** D)
+{
 //make odds list
 	vector<v*> odds = _makeOddsList(V);
 	//while oddsList is not empty
@@ -266,7 +267,8 @@ void perfectMatching(vector<v*> &V, int** D) {
   Description: The makeOddsList function will take the MST and return a
   list of all vertices of odd degree.
 ***************************************************************************/
-vector<v*> _makeOddsList(vector<v *> &V) {
+vector<v*> _makeOddsList(vector<v *> &V)
+{
 
 	vector<v*> odds;
 	//loop through each city
@@ -771,3 +773,53 @@ int find_tour(vector<v*> V, int pos, int ** D)
 
 	return pathLength;
 }
+
+int twoOpt(int **D, vector<int> &Tour, int sol, vector<v *> &V)
+{
+	//intialize solution
+	int newSolution = sol;
+	int k = 0;
+	//loop though and look at all edges
+	for (int i = 1; i < Tour.size(); ++i)
+	{
+		k = 1;
+		//compare current edge to 5 nearest neighbors
+		while (k <= 5 && D[V[Tour[i]]->id][V[Tour[k]]->id] <
+						 D[V[Tour[i-1]]->id][V[Tour[i]]->id]);
+		{
+			//if shorter path found, remove edge and edit tour
+			_swapTwo(Tour, i, k);
+			//calculate new solution length
+			newSolution = _getPathLength(V, D, Tour);
+			++k;
+		}
+	}
+
+
+	return newSolution;
+}
+
+void _swapTwo(vector<int> Tour, int start, int end)
+{
+	while(end-start >0){
+		int temp = Tour[start];
+		Tour[start] = Tour[end];
+		Tour[end] = temp;
+		start++;
+		end--;
+	}
+}
+
+int _getPathLength(vector<v*> &V, int **D, vector<int> Tour) {
+	int newLength = 0;
+	for (int i = 0; i < Tour.size(); i++){
+		newLength += D[V[Tour[i]]->id][V[Tour[i+1]]->id];
+
+	}
+	//add edge back to start
+	newLength += D[V[Tour.size()-1]->id][V[Tour[0]]->id];
+
+	return newLength;
+}
+
+
