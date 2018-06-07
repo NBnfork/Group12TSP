@@ -616,39 +616,49 @@ vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
 	//repeat until current vertex has no neighbors(temp) and stack empty
 	while (!stk.empty() || temp[pos]->adjacent.size() > 0)
 	{
-		//if has neighbors...
-		if (temp[pos]->adjacent.size() > 0)
+		//if doesn't have neighbors...
+		if (temp[pos]->adjacent.size() == 0)
 		{
+			//add vertex to circuit
+			tour.push_back(pos);
+			//remove last vertex from stack an set as current
+			int last = stk.top();
+			stk.pop();
+			pos = last;
+		}
+		//if has neighbors...
+		else{
 			//add vertex to stack
 			stk.push(pos);
 
 			//take neighbor
 			v* neighbor = temp[pos]->adjacent.back();
 			int neighpos = neighbor->id;
+			
+			cout << "stack holds: " << pos << " and neighpos is " << neighpos << endl;
 
 			//remove neighbor edge to current vertex
 			temp[pos]->adjacent.pop_back();
+			
+			cout << "Deleted back" << endl;
+			_printThisV(temp[pos]);
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++)
 			{
+				//SEG FAULTS here when goes from V[1] to V[0] since the Null pointer id gets selected
+				// I think I need to change the while loop to also include temp[pos]->adjacent != NULL
 				if (pos == temp[neighpos]->adjacent[i]->id) {
+					cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin()+i);
+					cout << "deleting adjacent" << endl;
+					_printThisV(temp[neighpos]);
 					break;
 				}
-				//set neighbor to current vertex
-				pos = neighpos;
 			}
-
+			//set neighbor to current vertex
+			pos = neighpos;
 		}
-		//if doesn't have neighbors...
-		else {
-			//add vertex to circuit
-			tour.push_back(pos);
-			//remove last vertex from stack & set as current
-			int last = stk.top();
-			stk.pop();
-			pos = last;
-		}
+		
 	}
 	//add current pos to end of tour
 	tour.push_back(pos);
