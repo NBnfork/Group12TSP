@@ -10,7 +10,8 @@ int main(int argc, char* argv[]) {
 	string filename = argv[1];					// Filename of input 
 	vector<v*> Vertices;						// Container for cities, v is a struct (see buildData.hpp)
 	int n = 0;									// Number of cities
-	int ** Distances = NULL;					// Matrix for distances between cities
+	int ** Distances = NULL;
+	// Matrix for distances between cities
 
 	cout << "\n- Reading Data --------------------------- " << endl;
 	
