@@ -8,6 +8,8 @@
 #include <sstream>
 #include <iomanip>
 #include <cmath>
+#include <stack>
+
 using namespace std;
 /***************************************************************
 *
@@ -219,13 +221,71 @@ void buildMST(vector<v*> &V, int ** D, int n)
 	/* error checking */
 	if (Q.size() != 0 || current != NULL)
 	{ cout << "ERROR!! Something wrong with buildMST(), there is remaining vertices unhandled" << endl; }
+
+	cout << "/* Constructed MST */" << endl;
 }
 
+/***************************************************************************
+ [Perfect Match]
+  Description: The prefectMatching portion of our modified Christofide's
+  algorithm will take the odd vertices from the MST and build a perfect
+  matching graph PM. This graph will be combined with MST to create an
+  Eulerian circuit. In order increase the speed of our program
+  this perfect matching algorithm will use a greedy approach.
+***************************************************************************/
+void perfectMatching(vector<v*> &V, int** D) {
+//make odds list
+	vector<v*> odds = _makeOddsList(V);
+	//while oddsList is not empty
+	while (!odds.empty()) {
+		int distance = INT32_MAX;    //for comparing distances
+		int closest; //for saving closest
+		int i; //index of next vertex
+		//loop through oddsList finding min distance
+		for (i = 1; i < odds.size(); ++i){
+			if (distance > D[odds.front()->id][odds[i]->id]){
+				distance = D[odds.front()->id][odds[i]->id];
+				closest = i;
+			}
+		}
+		/*error checking */
+		if(closest == NULL){
+			cout << "ERROR!! perfectMatching function broken, no match could be found" << endl;
+		}
+		//update adj lists, update oddsList
+		odds.front()->adjacent.push_back(odds[closest]);
+		odds[closest]->adjacent.push_back(odds.front());
+		odds.erase(odds.begin() + closest);
+		odds.erase(odds.begin());
+	}
+	cout << "/* Constructed perfect match graph */" << endl;
+}
 
+/***************************************************************************
+  [Get odd vertices]
+  Description: The makeOddsList function will take the MST and return a
+  list of all vertices of odd degree.
+***************************************************************************/
+vector<v*> _makeOddsList(vector<v *> &V) {
 
-
-
-
+	vector<v*> odds;
+	//loop through each city
+	for (int i = 0; i < V.size(); ++i) {
+		//for first city
+		if (i == 0) {
+			int vDegree = V[i]->adjacent.size() - 1;
+			if (vDegree % 2 != 0) {
+				odds.push_back(V[i]);
+			}
+		}else{
+			//if odd add to vector
+			if (V[i]->adjacent.size() % 2 != 0) {
+				odds.push_back(V[i]);
+			}
+		}
+	}
+	return odds;
+}
 /************************************************************************************
 *
 *	[Print the full Vertex container]
@@ -594,7 +654,7 @@ void _vectorTrim(vector<v*> &V , int n)
 
 //form Eulerian circuit from connected multigraph
 // params: pos is starting vertex id, tour is current tour being processed 
-vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
+vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 {
 	// make copy of adjacenylist
 	vector<v*> temp;
@@ -644,11 +704,11 @@ vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
 			_printThisV(temp[pos]);
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++)
-			{
+			
 				//SEG FAULTS here when goes from V[1] to V[0] since the Null pointer id gets selected
 				// I think I need to change the while loop to also include temp[pos]->adjacent != NULL
 				if (pos == temp[neighpos]->adjacent[i]->id) {
-					cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
+					cout << "deleting " << temp[neighpos]->adjacent[i]->id << end
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin()+i);
 					cout << "deleting adjacent" << endl;
 					_printThisV(temp[neighpos]);
@@ -666,7 +726,7 @@ vector<int> euler(vector<v*> V, int pos, vector<int> &tour)
 }
 
 //make Eulerian circuit into hamiltonian circuit
-void make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
+void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 {
 	//set up indicators for visited, total dist = 0, current & next
 	const int vSize = tour.size();
@@ -702,10 +762,12 @@ void make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 
 int find_tour(vector<v*> V, int pos, int ** D)
 {
+	int pathLength;
+	vector<int> circuit;
 	//euler circuit
-	 euler(V, pos, circuit);
+	 _euler(V, pos, circuit);
 
-	make_hamilton(circuit, pathLength, D);
+	_make_hamilton(circuit, pathLength, D);
 
 	return pathLength;
 }

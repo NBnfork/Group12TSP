@@ -17,9 +17,19 @@ int main(int argc, char* argv[]) {
 		n = readData(Vertices, filename);
  
 	cout << "\n- Building Data --------------------------- " << endl;
-	
+	//start timing total
+	clock_t mainStart = clock();
+
 		Distances = buildMatrix(Vertices, n);
 		buildMST(Vertices, Distances, n);
+		perfectMatching(Vertices, Distances);
+		find_tour(Vertices, 0, Distances);
+
+
+	//output timing
+	clock_t mainEnd = clock();
+	double time = (double) (mainEnd - mainStart) / CLOCKS_PER_SEC;
+	std::cout << "\nTotal running time: " << time << " secs" << std::endl;
 
 /**//* Optional -------------------------------------------------------------------------------------- */
 /**/
