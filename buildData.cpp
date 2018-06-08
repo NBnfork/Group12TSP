@@ -679,16 +679,22 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 	while (!stk.empty() || temp[pos]->adjacent.size() > 0)
 	{
 		//if doesn't have neighbors...
-		if (temp[pos]->adjacent.size() == 0)
+		if (temp[pos]->adjacent.size() == 0 || temp[pos]->adjacent.back() == NULL)
 		{
+			if(temp[pos]->adjacent.back() == NULL){
+
+			}
 			//add vertex to circuit
 			tour.push_back(pos);
 			//remove last vertex from stack an set as current
 			int last = stk.top();
 			stk.pop();
 			cout << "Add" << pos << " to tour" << endl;
-			cout << "Popping << last << "off the stack" << endl;
+			cout << "Popping" << last << "off the stack" << endl;
 			pos = last;
+			if (last == 0){
+				return tour;
+			}
 		}
 		//if has neighbors...
 		else {
@@ -709,7 +715,7 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
-				if(temp[neighpos]->adjacent[i]==NULL)
+				if(temp[neighpos]->adjacent[i] == NULL)
 				{
 					i++;
 					cout << "i is now " << i << endl;
