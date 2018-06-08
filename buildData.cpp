@@ -784,15 +784,14 @@ int find_tour(vector<v*> V, int pos, int ** D)
 	cout << "/* Euler Circuit Complete" << endl;
 	_make_hamilton(circuit, pathLength, D);
 	cout << "/* Hamiltonian Path Complete" << endl;
-	pathLength = _getPathLength(V, D, circuit);
 	cout << "/* Solution before 2opt: " << pathLength << endl;
 	//run some 2opts to optimize results
 	int numOfTwoOpts = 1;
 	for (int i = 0; i < numOfTwoOpts; ++i) {
 		twoOpt(D, circuit, pathLength, V);
 	}
-	pathLength = _getPathLength(V, D, circuit);
-	cout << "Solution after " << numOfTwoOpts << "2opt runs: " << pathLength;
+	//pathLength = _getPathLength(V, D, circuit);
+	cout << "Solution after " << numOfTwoOpts << " 2opt runs: " << pathLength;
 
 	return pathLength;
 }
@@ -808,7 +807,7 @@ int twoOpt(int **D, vector<int> &Tour, int sol, vector<v *> &V)
 		k = 1;
 		//compare current edge to 5 nearest neighbors
 		while (k <= 5 && D[V[Tour[i]]->id][V[Tour[k]]->id] <
-						 D[V[Tour[i-1]]->id][V[Tour[i]]->id]);
+						 D[V[Tour[i-1]]->id][V[Tour[i]]->id])
 		{
 			//if shorter path found, remove edge and edit tour
 			_swapTwo(Tour, i, k);
@@ -824,7 +823,7 @@ int twoOpt(int **D, vector<int> &Tour, int sol, vector<v *> &V)
 
 void _swapTwo(vector<int> Tour, int start, int end)
 {
-	while(end-start >0){
+	while(end-start > 0){
 		int temp = Tour[start];
 		Tour[start] = Tour[end];
 		Tour[end] = temp;
@@ -835,7 +834,7 @@ void _swapTwo(vector<int> Tour, int start, int end)
 
 int _getPathLength(vector<v*> &V, int **D, vector<int> Tour) {
 	int newLength = 0;
-	for (int i = 0; i < Tour.size(); i++){
+	for (int i = 0; i < Tour.size()-1; i++){
 		newLength += D[V[Tour[i]]->id][V[Tour[i+1]]->id];
 
 	}
