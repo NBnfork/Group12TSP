@@ -689,8 +689,8 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			//remove last vertex from stack an set as current
 			int last = stk.top();
 			stk.pop();
-			cout << "Add" << pos << " to tour" << endl;
-			cout << "Popping" << last << "off the stack" << endl;
+			//cout << "Add" << pos << " to tour" << endl;
+			//cout << "Popping" << last << "off the stack" << endl;
 			pos = last;
 			if (last == 0){
 				return tour;
@@ -705,27 +705,27 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			v *neighbor = temp[pos]->adjacent.back();
 			int neighpos = neighbor->id;
 
-			cout << "stack holds: " << pos << " and neighpos is " << neighpos << endl;
+			//cout << "stack holds: " << pos << " and neighpos is " << neighpos << endl;
 
 			//remove neighbor edge to current vertex
 			temp[pos]->adjacent.pop_back();
 
-			cout << "Deleted back" << endl;
-			_printThisV(temp[pos]);
+			//cout << "Deleted back" << endl;
+			//_printThisV(temp[pos]);
 
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
 				if(temp[neighpos]->adjacent[i] == NULL)
 				{
 					i++;
-					cout << "i is now " << i << endl;
+					//cout << "i is now " << i << endl;
 				}
 
 				if (pos == temp[neighpos]->adjacent[i]->id) {
-					cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
+					//cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin() + i);
-					cout << "deleting adjacent" << endl;
-					_printThisV(temp[neighpos]);
+					//cout << "deleting adjacent" << endl;
+					//_printThisV(temp[neighpos]);
 					break;
 				}
 			}
@@ -784,15 +784,15 @@ int find_tour(vector<v*> V, int pos, int ** D)
 	cout << "/* Euler Circuit Complete" << endl;
 	_make_hamilton(circuit, pathLength, D);
 	cout << "/* Hamiltonian Path Complete" << endl;
-	pathLength = _getPathLength(V, D, circuit);
 	cout << "/* Solution before 2opt: " << pathLength << endl;
 	//run some 2opts to optimize results
-	int numOfTwoOpts = 1;
+	/*int numOfTwoOpts = 0;
 	for (int i = 0; i < numOfTwoOpts; ++i) {
 		twoOpt(D, circuit, pathLength, V);
 	}
 	pathLength = _getPathLength(V, D, circuit);
 	cout << "Solution after " << numOfTwoOpts << "2opt runs: " << pathLength;
+	 */
 
 	return pathLength;
 }

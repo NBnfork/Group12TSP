@@ -18,28 +18,49 @@ int main(int argc, char* argv[]) {
 		n = readData(Vertices, filename);
  
 	cout << "\n- Building Data --------------------------- " << endl;
-	//start timing total
+	//timing total
 	clock_t mainStart = clock();
 
-		Distances = buildMatrix(Vertices, n);
-		buildMST(Vertices, Distances, n);
-		perfectMatching(Vertices, Distances);
-		find_tour(Vertices, 0, Distances);
+	//timing
+	clock_t start = clock();
+	Distances = buildMatrix(Vertices, n); //insert function here
+	clock_t end = clock();
+	double time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to build DMaxtrix: " << time << " secs" << std::endl;
 
+	//timing
+	start = clock();
+	buildMST(Vertices, Distances, n);
+	end = clock();
+	time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to build MST" << time << " secs" << std::endl;
 
-	//output timing
+	//timing
+	start = clock();
+	perfectMatching(Vertices, Distances);
+	end = clock();
+	time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to add Perfect Matching: " << time << " secs" << std::endl;
+
+	//timing
+	start = clock();
+	find_tour(Vertices, 0, Distances);
+	end = clock();
+	time = (double) (end - start) / CLOCKS_PER_SEC;
+	std::cout << "Time to add Perfect Matching: " << time << " secs" << std::endl;
+
 	clock_t mainEnd = clock();
-	double time = (double) (mainEnd - mainStart) / CLOCKS_PER_SEC;
-	std::cout << "\nTotal running time: " << time << " secs" << std::endl;
+	time = (double) (mainEnd - mainStart) / CLOCKS_PER_SEC;
+	std::cout << "\nTotal running: " << time << " secs" << std::endl;
 
-/**//* Optional -------------------------------------------------------------------------------------- */
-/**/
-/**/	cout << "\n- Output Data ----------------------------- " << endl;
-/**/	
-/**/		_printDistanceMatrix(Distances, n, "outputDistanceMatrix.txt");			// take away the string argument to print to screen							
-/**/		printMSTLinklist(Vertices, n);
-/**/		printMSTMatrix(Vertices, n, "outputMST.txt");							// take away the string argument to print to screen
-/**/
+/**//* Optional --------------------------------------------------------------------------------------
+/**
+/**	cout << "\n- Output Data ----------------------------- " << endl;
+/**
+/**		_printDistanceMatrix(Distances, n, "outputDistanceMatrix.txt");			// take away the string argument to print to screen
+/**		printMSTLinklist(Vertices, n);
+/**		printMSTMatrix(Vertices, n, "outputMST.txt");							// take away the string argument to print to screen
+/**
 /**//*--------------------------------------------------------------------------------------------------*/
 
 	cout << "\n- Clean up Data --------------------------- " << endl;
