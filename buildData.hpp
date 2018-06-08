@@ -23,6 +23,8 @@ int** buildMatrix(vector<v*>, int);					// Create and return a 2D int matrix fil
 void buildMST(vector<v*> &, int ** , int);			// Create an MST by pointing verticies in the "adjacent" list of each vertex
 void perfectMatching(vector<v*> &, int**);			// Create an perfectMatching graph and add it to the MST by add
 int find_tour(vector<v*> V, int pos, int ** D);
+int twoOpt(int **, vector<int> &Tour, int, vector<v*> &);
+
 
 /* Public Functions */
 void printMSTLinklist(vector<v*>, int);				// Display MST in Link list format. The ID in [ ] is the parent. (Each vertex only has one parent)
@@ -38,6 +40,9 @@ void _addToQueue(vector<v*> &, v*);					// Add a vertex to queue, this keeps que
 vector<v*> _makeOddsList(vector<v*> &);			// create list of vertex with odd degree (used by perfectMatching)
 vector<int> _euler(vector<v*>, int, vector<int>&);
 void _make_hamilton(vector<int> &, int &, int ** D);
+void _swapTwo(vector<int> Tour, int start, int end);
+int _getPathLength(vector<v *> &V, int **D, vector<int> Tour);
+
 /* Helper Functions */
 void _printV(vector<v*>);							// Print the whole vertex container in full detail
 void _printThisV(v*);								// Print one vertex in full detail

@@ -233,7 +233,8 @@ void buildMST(vector<v*> &V, int ** D, int n)
   Eulerian circuit. In order increase the speed of our program
   this perfect matching algorithm will use a greedy approach.
 ***************************************************************************/
-void perfectMatching(vector<v*> &V, int** D) {
+void perfectMatching(vector<v*> &V, int** D)
+{
 //make odds list
 	vector<v*> odds = _makeOddsList(V);
 	//while oddsList is not empty
@@ -266,7 +267,8 @@ void perfectMatching(vector<v*> &V, int** D) {
   Description: The makeOddsList function will take the MST and return a
   list of all vertices of odd degree.
 ***************************************************************************/
-vector<v*> _makeOddsList(vector<v *> &V) {
+vector<v*> _makeOddsList(vector<v *> &V)
+{
 
 	vector<v*> odds;
 	//loop through each city
@@ -689,21 +691,22 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			pos = last;
 		}
 		//if has neighbors...
-		else{
+		else {
 			//add vertex to stack
 			stk.push(pos);
 
 			//take neighbor
-			v* neighbor = temp[pos]->adjacent.back();
+			v *neighbor = temp[pos]->adjacent.back();
 			int neighpos = neighbor->id;
-			
+
 			cout << "stack holds: " << pos << " and neighpos is " << neighpos << endl;
 
 			//remove neighbor edge to current vertex
 			temp[pos]->adjacent.pop_back();
-			
+
 			cout << "Deleted back" << endl;
 			_printThisV(temp[pos]);
+
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
 				if(temp[neighpos]->adjacent[i]==NULL)
@@ -711,9 +714,10 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 					i++;
 					cout << "i is now " << i << endl;
 				}
+
 				if (pos == temp[neighpos]->adjacent[i]->id) {
-					cout << "deleting " << temp[neighpos]->adjacent[i]->id << end
-					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin()+i);
+					cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
+					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin() + i);
 					cout << "deleting adjacent" << endl;
 					_printThisV(temp[neighpos]);
 					break;
@@ -721,6 +725,7 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			}
 			//set neighbor to current vertex
 			pos = neighpos;
+
 		}
 		
 	}
@@ -769,9 +774,69 @@ int find_tour(vector<v*> V, int pos, int ** D)
 	int pathLength;
 	vector<int> circuit;
 	//euler circuit
-	 _euler(V, pos, circuit);
-
+	circuit = _euler(V, pos, circuit);
+	cout << "/* Euler Circuit Complete" << endl;
 	_make_hamilton(circuit, pathLength, D);
+	cout << "/* Hamiltonian Path Complete" << endl;
+	pathLength = _getPathLength(V, D, circuit);
+	cout << "/* Solution before 2opt: " << pathLength << endl;
+	//run some 2opts to optimize results
+	int numOfTwoOpts = 1;
+	for (int i = 0; i < numOfTwoOpts; ++i) {
+		twoOpt(D, circuit, pathLength, V);
+	}
+	pathLength = _getPathLength(V, D, circuit);
+	cout << "Solution after " << numOfTwoOpts << "2opt runs: " << pathLength;
 
 	return pathLength;
 }
+
+int twoOpt(int **D, vector<int> &Tour, int sol, vector<v *> &V)
+{
+	//intialize solution
+	int newSolution = sol;
+	int k = 0;
+	//loop though and look at all edges
+	for (int i = 1; i < Tour.size(); ++i)
+	{
+		k = 1;
+		//compare current edge to 5 nearest neighbors
+		while (k <= 5 && D[V[Tour[i]]->id][V[Tour[k]]->id] <
+						 D[V[Tour[i-1]]->id][V[Tour[i]]->id]);
+		{
+			//if shorter path found, remove edge and edit tour
+			_swapTwo(Tour, i, k);
+			//calculate new solution length
+			newSolution = _getPathLength(V, D, Tour);
+			++k;
+		}
+	}
+
+
+	return newSolution;
+}
+
+void _swapTwo(vector<int> Tour, int start, int end)
+{
+	while(end-start >0){
+		int temp = Tour[start];
+		Tour[start] = Tour[end];
+		Tour[end] = temp;
+		start++;
+		end--;
+	}
+}
+
+int _getPathLength(vector<v*> &V, int **D, vector<int> Tour) {
+	int newLength = 0;
+	for (int i = 0; i < Tour.size(); i++){
+		newLength += D[V[Tour[i]]->id][V[Tour[i+1]]->id];
+
+	}
+	//add edge back to start
+	newLength += D[V[Tour.size()-1]->id][V[Tour[0]]->id];
+
+	return newLength;
+}
+
+
