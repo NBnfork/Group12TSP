@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 	find_tour(Vertices, 0, Distances);
 	end = clock();
 	time = (double) (end - start) / CLOCKS_PER_SEC;
-	std::cout << "Time to add Perfect Matching: " << time << " secs" << std::endl;
+	std::cout << "Time toDo find Tour: " << time << " secs" << std::endl;
 
 	clock_t mainEnd = clock();
 	time = (double) (mainEnd - mainStart) / CLOCKS_PER_SEC;
