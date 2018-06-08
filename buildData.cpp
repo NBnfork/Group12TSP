@@ -686,6 +686,8 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			//remove last vertex from stack an set as current
 			int last = stk.top();
 			stk.pop();
+			cout << "Add" << pos << " to tour" << endl;
+			cout << "Popping << last << "off the stack" << endl;
 			pos = last;
 		}
 		//if has neighbors...
@@ -705,10 +707,14 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			cout << "Deleted back" << endl;
 			_printThisV(temp[pos]);
 
-			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++) {
 
-				//SEG FAULTS here when goes from V[1] to V[0] since the Null pointer id gets selected
-				// I think I need to change the while loop to also include temp[pos]->adjacent != NULL
+			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
+				if(temp[neighpos]->adjacent[i]==NULL)
+				{
+					i++;
+					cout << "i is now " << i << endl;
+				}
+
 				if (pos == temp[neighpos]->adjacent[i]->id) {
 					cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin() + i);
