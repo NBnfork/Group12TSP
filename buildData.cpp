@@ -249,10 +249,7 @@ void perfectMatching(vector<v*> &V, int** D)
 				closest = i;
 			}
 		}
-		/*error checking */
-		if(closest == NULL){
-			cout << "ERROR!! perfectMatching function broken, no match could be found" << endl;
-		}
+
 		//update adj lists, update oddsList
 		odds.front()->adjacent.push_back(odds[closest]);
 		odds[closest]->adjacent.push_back(odds.front());
@@ -827,7 +824,6 @@ void twoOpt(int **D, vector<int> &Tour, vector<v *> &V)
 
 		//cout << "V[Tour[i]]->id = " << V[Tour[i]]->id << " V[Tour[k]]->id = " << V[Tour[k]]->id << endl;
 		//cout << "Tour[i] = " << Tour[i] << " Tour[k] = " << Tour[k] << endl;
-		//compare current edge to 5 nearest neighbors
 		while (k <= 5 && D[Tour[i]][Tour[i+k]] <
 
 						 D[Tour[i-1]][Tour[i]])

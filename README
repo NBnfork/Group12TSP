@@ -1,0 +1,8 @@
+
+Use "make" command to build TSPproject program
+
+run program with ./TSPproject and "filename" on command line 
+
+"make clean" removes all object files and executables in folder
+
+
