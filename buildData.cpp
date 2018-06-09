@@ -655,18 +655,15 @@ void _vectorTrim(vector<v*> &V , int n)
  * form Eulerian circuit from connected multigraph
  * params: pos is starting vertex id, tour is current tour being processed
 ***************************************************************************/
- vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
-{
+ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour) {
 	// make copy of adjacenylist
-	vector<v*> temp;
+	vector<v *> temp;
 
-	for (int i = 0; i < V.size(); i++)
-	{
+	for (int i = 0; i < V.size(); i++) {
 		v *thisV = V[i];
 		temp.push_back(V[i]);
 
-		for (int j = 0; j < thisV->adjacent.size(); j++)
-		{
+		for (int j = 0; j < thisV->adjacent.size(); j++) {
 			temp[i]->adjacent[j] = thisV->adjacent[j];
 		}
 	}
@@ -675,12 +672,10 @@ void _vectorTrim(vector<v*> &V , int n)
 	std::stack<int> stk;
 
 	//repeat until current vertex has no neighbors(temp) and stack empty
-	while (!stk.empty() || temp[pos]->adjacent.size() > 0)
-	{
+	while (!stk.empty() || temp[pos]->adjacent.size() > 0) {
 		//if doesn't have neighbors...
-		if (temp[pos]->adjacent.size() == 0 || temp[pos]->adjacent.back() == NULL)
-		{
-			if(temp[pos]->adjacent.back() == NULL){
+		if (temp[pos]->adjacent.size() == 0 || temp[pos]->adjacent.back() == NULL) {
+			if (temp[pos]->adjacent.back() == NULL) {
 
 			}
 			//add vertex to circuit
@@ -692,11 +687,11 @@ void _vectorTrim(vector<v*> &V , int n)
 			//cout << "Add" << pos << " to tour" << endl;
 			//cout << "Popping" << last << "off the stack" << endl;
 			pos = last;
-			if (last == 0){
+			if (last == 0) {
 				return tour;
 			}
 		}
-		//if has neighbors...
+			//if has neighbors...
 		else {
 			//add vertex to stack
 			stk.push(pos);
@@ -713,9 +708,8 @@ void _vectorTrim(vector<v*> &V , int n)
 			//cout << "Deleted back" << endl;
 			//_printThisV(temp[pos]);
 
-			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
-				if(temp[neighpos]->adjacent[i] == NULL)
-				{
+			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++) {
+				if (temp[neighpos]->adjacent[i] == NULL) {
 					i++;
 
 					//cout << "i is now " << i << endl;
@@ -734,12 +728,12 @@ void _vectorTrim(vector<v*> &V , int n)
 			pos = neighpos;
 
 		}
-		
+
 	}
 	//add current pos to end of tour
 	tour.push_back(pos);
 	return tour;
-
+}
 /***************************************************************************
  * [_make_hamilton]
  * Description: make Eulerian circuit into hamiltonian circuit
@@ -777,6 +771,8 @@ void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 	}
 	//add distance from current and next to total distance
 	path_dist += D[*curr][*next];
+	//add distance back to start
+	path_dist += D[0][*next];
 }
    
 /***************************************************************************
