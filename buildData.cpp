@@ -455,6 +455,7 @@ void _addToQueue(vector<v*> &Q, v* target)
 v* _getMinKey(vector<v*> &Q)
 {
 	if (Q.size() == 0)
+
 	{
 		return NULL;
 	}
@@ -652,11 +653,12 @@ void _vectorTrim(vector<v*> &V , int n)
 	cout << "[!] V trimmed, capacity is now [" << V.capacity() << "], containing [" << n << "] elements." << endl;
 }
 
-*/
 
-//form Eulerian circuit from connected multigraph
-// params: pos is starting vertex id, tour is current tour being processed 
-vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
+/***************************************************************************
+ * form Eulerian circuit from connected multigraph
+ * params: pos is starting vertex id, tour is current tour being processed
+***************************************************************************/
+ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 {
 	// make copy of adjacenylist
 	vector<v*> temp;
@@ -689,8 +691,9 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			//remove last vertex from stack an set as current
 			int last = stk.top();
 			stk.pop();
-			cout << "Add" << pos << " to tour" << endl;
-			cout << "Popping" << last << "off the stack" << endl;
+
+			//cout << "Add" << pos << " to tour" << endl;
+			//cout << "Popping" << last << "off the stack" << endl;
 			pos = last;
 			if (last == 0){
 				return tour;
@@ -705,27 +708,28 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 			v *neighbor = temp[pos]->adjacent.back();
 			int neighpos = neighbor->id;
 
-			cout << "stack holds: " << pos << " and neighpos is " << neighpos << endl;
+			//cout << "stack holds: " << pos << " and neighpos is " << neighpos << endl;
 
 			//remove neighbor edge to current vertex
 			temp[pos]->adjacent.pop_back();
 
-			cout << "Deleted back" << endl;
-			_printThisV(temp[pos]);
-
+			//cout << "Deleted back" << endl;
+			//_printThisV(temp[pos]);
 
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
 				if(temp[neighpos]->adjacent[i] == NULL)
 				{
 					i++;
-					cout << "i is now " << i << endl;
+
+					//cout << "i is now " << i << endl;
 				}
 
 				if (pos == temp[neighpos]->adjacent[i]->id) {
-					cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
+					//cout << "deleting " << temp[neighpos]->adjacent[i]->id << endl;
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin() + i);
-					cout << "deleting adjacent" << endl;
-					_printThisV(temp[neighpos]);
+					//cout << "deleting adjacent" << endl;
+					//_printThisV(temp[neighpos]);
+
 					break;
 				}
 			}
@@ -738,9 +742,12 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 	//add current pos to end of tour
 	tour.push_back(pos);
 	return tour;
-}
 
-//make Eulerian circuit into hamiltonian circuit
+/***************************************************************************
+ * [_make_hamilton]
+ * Description: make Eulerian circuit into hamiltonian circuit
+***************************************************************************/
+
 void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 {
 	//set up indicators for visited, total dist = 0, current & next
@@ -774,8 +781,13 @@ void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 	//add distance from current and next to total distance
 	path_dist += D[*curr][*next];
 }
+   
+/***************************************************************************
+ [find_tour]
+ * Description: drives the creation of the final TSP solution "Tour"
 
-int find_tour(vector<v*> V, int pos, int ** D)
+***************************************************************************/
+vector<int> find_tour(vector<v *> V, int pos, int **D)
 {
 	int pathLength;
 	vector<int> circuit;
@@ -783,45 +795,57 @@ int find_tour(vector<v*> V, int pos, int ** D)
 	circuit = _euler(V, pos, circuit);
 	cout << "/* Euler Circuit Complete" << endl;
 	_make_hamilton(circuit, pathLength, D);
-	cout << "/* Hamiltonian Path Complete" << endl;
-	cout << "/* Solution before 2opt: " << pathLength << endl;
-	//run some 2opts to optimize results
-	int numOfTwoOpts = 1;
-	for (int i = 0; i < numOfTwoOpts; ++i) {
-		twoOpt(D, circuit, pathLength, V);
-	}
-	//pathLength = _getPathLength(V, D, circuit);
-	cout << "Solution after " << numOfTwoOpts << " 2opt runs: " << pathLength;
 
-	return pathLength;
+	cout << "/* Hamiltonian Path Complete" << endl << endl;
+	cout << "/* Solution: " << pathLength << endl;
+	/*run some 2opts to optimize results
+	int numOfTwoOpts = 0;
+	for (int i = 0; i < numOfTwoOpts; ++i) {
+		twoOpt(D, circuit, V);
+	}
+	cout << endl;
+	 //pathLength = _getPathLength(V, D, circuit);
+	 //cout << "Solution after " << numOfTwoOpts << " 2opt runs: " << pathLength;
+	*/
+
+	//add solution to end of circuit for use by outputfunction
+	circuit.push_back(pathLength);
+	return circuit;
+
 }
 
-int twoOpt(int **D, vector<int> &Tour, int sol, vector<v *> &V)
+void twoOpt(int **D, vector<int> &Tour, vector<v *> &V)
 {
 	//intialize solution
-	int newSolution = sol;
+	int newSolution = 0;
+
 	int k = 0;
 	//loop though and look at all edges
 	for (int i = 1; i < Tour.size(); ++i)
 	{
 		k = 1;
+
+		//cout << "V[Tour[i]]->id = " << V[Tour[i]]->id << " V[Tour[k]]->id = " << V[Tour[k]]->id << endl;
+		//cout << "Tour[i] = " << Tour[i] << " Tour[k] = " << Tour[k] << endl;
 		//compare current edge to 5 nearest neighbors
-		while (k <= 5 && D[V[Tour[i]]->id][V[Tour[k]]->id] <
-						 D[V[Tour[i-1]]->id][V[Tour[i]]->id])
+		while (k <= 5 && D[Tour[i]][Tour[i+k]] <
+
+						 D[Tour[i-1]][Tour[i]])
 		{
 			//if shorter path found, remove edge and edit tour
 			_swapTwo(Tour, i, k);
-			//calculate new solution length
-			newSolution = _getPathLength(V, D, Tour);
+			cout << "[" << i << "<->" << i+k << "]!  ";			
 			++k;
 		}
 	}
 
-
-	return newSolution;
+	newSolution = _getPathLength(V, D, Tour);
+	cout << "Solution after a 2opt run: " << newSolution << endl;	
+	//return newSolution;
 }
 
-void _swapTwo(vector<int> Tour, int start, int end)
+void _swapTwo(vector<int> &Tour, int start, int end)
+
 {
 	while(end-start > 0){
 		int temp = Tour[start];
@@ -843,5 +867,20 @@ int _getPathLength(vector<v*> &V, int **D, vector<int> Tour) {
 
 	return newLength;
 }
+
+
+void outputSolution(vector<int> &Tour, string filename) {
+	filename += ".tour";
+	ofstream outputFile;
+	outputFile.open(filename);
+	//output solution
+	outputFile << Tour.back() << endl;
+	//output rest of tour
+	for (int i = 0; i < Tour.size()-1; ++i) {
+		outputFile << Tour[i] << endl;
+	}
+	outputFile.close();
+}
+
 
 
