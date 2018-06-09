@@ -22,8 +22,9 @@ int readData(vector<v*> &, string);					// Fill container with dynamically alloc
 int** buildMatrix(vector<v*>, int);					// Create and return a 2D int matrix filled with distances between cities
 void buildMST(vector<v*> &, int ** , int);			// Create an MST by pointing verticies in the "adjacent" list of each vertex
 void perfectMatching(vector<v*> &, int**);			// Create an perfectMatching graph and add it to the MST by add
-int find_tour(vector<v*>, int , int** );
+vector<int> find_tour(vector<v *>, int, int **);
 void twoOpt(int **, vector<int> &, vector<v*> &);
+void outputSolution(vector<int> &, string filename);
 
 
 /* Public Functions */

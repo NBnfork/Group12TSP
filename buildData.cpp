@@ -455,6 +455,7 @@ void _addToQueue(vector<v*> &Q, v* target)
 v* _getMinKey(vector<v*> &Q)
 {
 	if (Q.size() == 0)
+
 	{
 		return NULL;
 	}
@@ -653,10 +654,11 @@ void _vectorTrim(vector<v*> &V , int n)
 }
 
 */
-
-//form Eulerian circuit from connected multigraph
-// params: pos is starting vertex id, tour is current tour being processed 
-vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
+/***************************************************************************
+ * form Eulerian circuit from connected multigraph
+ * params: pos is starting vertex id, tour is current tour being processed
+***************************************************************************/
+ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 {
 	// make copy of adjacenylist
 	vector<v*> temp;
@@ -739,8 +741,10 @@ vector<int> _euler(vector<v*> V, int pos, vector<int> &tour)
 	tour.push_back(pos);
 	return tour;
 }
-
-//make Eulerian circuit into hamiltonian circuit
+/***************************************************************************
+ * [_make_hamilton]
+ * Description: make Eulerian circuit into hamiltonian circuit
+***************************************************************************/
 void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 {
 	//set up indicators for visited, total dist = 0, current & next
@@ -774,8 +778,12 @@ void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 	//add distance from current and next to total distance
 	path_dist += D[*curr][*next];
 }
+/***************************************************************************
+ [find_tour]
+ * Description: drives the creation of the final TSP solution "Tour"
 
-int find_tour(vector<v*> V, int pos, int ** D)
+***************************************************************************/
+vector<int> find_tour(vector<v *> V, int pos, int **D)
 {
 	int pathLength;
 	vector<int> circuit;
@@ -783,26 +791,28 @@ int find_tour(vector<v*> V, int pos, int ** D)
 	circuit = _euler(V, pos, circuit);
 	cout << "/* Euler Circuit Complete" << endl;
 	_make_hamilton(circuit, pathLength, D);
-	cout << "/* Hamiltonian Path Complete" << endl;
-	cout << "/* Solution before 2opt: " << pathLength << endl;
-	//run some 2opts to optimize results
-	int numOfTwoOpts = 10;
+	cout << "/* Hamiltonian Path Complete" << endl << endl;
+	cout << "/* Solution: " << pathLength << endl;
+	/*run some 2opts to optimize results
+	int numOfTwoOpts = 0;
 	for (int i = 0; i < numOfTwoOpts; ++i) {
 		twoOpt(D, circuit, V);
 	}
 	cout << endl;
-	// pathLength = _getPathLength(V, D, circuit);
-	// cout << "Solution after " << numOfTwoOpts << " 2opt runs: " << pathLength;
+	 //pathLength = _getPathLength(V, D, circuit);
+	 //cout << "Solution after " << numOfTwoOpts << " 2opt runs: " << pathLength;
+	*/
 
-	//calculate new solution length
-	
-	return pathLength;
+	//add solution to end of circuit for use by outputfunction
+	circuit.push_back(pathLength);
+	return circuit;
+
 }
 
 void twoOpt(int **D, vector<int> &Tour, vector<v *> &V)
 {
 	//intialize solution
-	int newSolution;
+	int newSolution = 0;
 	int k = 0;
 	//loop though and look at all edges
 	for (int i = 1; i < Tour.size(); ++i)
@@ -812,10 +822,11 @@ void twoOpt(int **D, vector<int> &Tour, vector<v *> &V)
 		//cout << "Tour[i] = " << Tour[i] << " Tour[k] = " << Tour[k] << endl;
 		//compare current edge to 5 nearest neighbors
 		while (k <= 5 && D[Tour[i]][Tour[i+k]] <
+
 						 D[Tour[i-1]][Tour[i]])
 		{
 			//if shorter path found, remove edge and edit tour
-			_swapTwo(Tour, i, i+k);
+			_swapTwo(Tour, i, k);
 			cout << "[" << i << "<->" << i+k << "]!  ";			
 			++k;
 		}
@@ -847,6 +858,19 @@ int _getPathLength(vector<v*> &V, int **D, vector<int> Tour) {
 	newLength += D[V[Tour.size()-1]->id][V[Tour[0]]->id];
 
 	return newLength;
+}
+
+void outputSolution(vector<int> &Tour, string filename) {
+	filename += ".tour";
+	ofstream outputFile;
+	outputFile.open(filename);
+	//output solution
+	outputFile << Tour.back() << endl;
+	//output rest of tour
+	for (int i = 0; i < Tour.size()-1; ++i) {
+		outputFile << Tour[i] << endl;
+	}
+	outputFile.close();
 }
 
 
