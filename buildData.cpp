@@ -653,7 +653,7 @@ void _vectorTrim(vector<v*> &V , int n)
 	cout << "[!] V trimmed, capacity is now [" << V.capacity() << "], containing [" << n << "] elements." << endl;
 }
 
-*/
+
 /***************************************************************************
  * form Eulerian circuit from connected multigraph
  * params: pos is starting vertex id, tour is current tour being processed
@@ -691,6 +691,7 @@ void _vectorTrim(vector<v*> &V , int n)
 			//remove last vertex from stack an set as current
 			int last = stk.top();
 			stk.pop();
+
 			//cout << "Add" << pos << " to tour" << endl;
 			//cout << "Popping" << last << "off the stack" << endl;
 			pos = last;
@@ -715,11 +716,11 @@ void _vectorTrim(vector<v*> &V , int n)
 			//cout << "Deleted back" << endl;
 			//_printThisV(temp[pos]);
 
-
 			for (unsigned int i = 0; i < temp[neighpos]->adjacent.size(); i++){
 				if(temp[neighpos]->adjacent[i] == NULL)
 				{
 					i++;
+
 					//cout << "i is now " << i << endl;
 				}
 
@@ -728,6 +729,7 @@ void _vectorTrim(vector<v*> &V , int n)
 					temp[neighpos]->adjacent.erase(temp[neighpos]->adjacent.begin() + i);
 					//cout << "deleting adjacent" << endl;
 					//_printThisV(temp[neighpos]);
+
 					break;
 				}
 			}
@@ -740,11 +742,12 @@ void _vectorTrim(vector<v*> &V , int n)
 	//add current pos to end of tour
 	tour.push_back(pos);
 	return tour;
-}
+
 /***************************************************************************
  * [_make_hamilton]
  * Description: make Eulerian circuit into hamiltonian circuit
 ***************************************************************************/
+
 void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 {
 	//set up indicators for visited, total dist = 0, current & next
@@ -778,6 +781,7 @@ void _make_hamilton(std::vector<int> &tour, int &path_dist, int ** D)
 	//add distance from current and next to total distance
 	path_dist += D[*curr][*next];
 }
+   
 /***************************************************************************
  [find_tour]
  * Description: drives the creation of the final TSP solution "Tour"
@@ -791,6 +795,7 @@ vector<int> find_tour(vector<v *> V, int pos, int **D)
 	circuit = _euler(V, pos, circuit);
 	cout << "/* Euler Circuit Complete" << endl;
 	_make_hamilton(circuit, pathLength, D);
+
 	cout << "/* Hamiltonian Path Complete" << endl << endl;
 	cout << "/* Solution: " << pathLength << endl;
 	/*run some 2opts to optimize results
@@ -813,11 +818,13 @@ void twoOpt(int **D, vector<int> &Tour, vector<v *> &V)
 {
 	//intialize solution
 	int newSolution = 0;
+
 	int k = 0;
 	//loop though and look at all edges
 	for (int i = 1; i < Tour.size(); ++i)
 	{
 		k = 1;
+
 		//cout << "V[Tour[i]]->id = " << V[Tour[i]]->id << " V[Tour[k]]->id = " << V[Tour[k]]->id << endl;
 		//cout << "Tour[i] = " << Tour[i] << " Tour[k] = " << Tour[k] << endl;
 		//compare current edge to 5 nearest neighbors
@@ -838,6 +845,7 @@ void twoOpt(int **D, vector<int> &Tour, vector<v *> &V)
 }
 
 void _swapTwo(vector<int> &Tour, int start, int end)
+
 {
 	while(end-start > 0){
 		int temp = Tour[start];
@@ -860,6 +868,7 @@ int _getPathLength(vector<v*> &V, int **D, vector<int> Tour) {
 	return newLength;
 }
 
+
 void outputSolution(vector<int> &Tour, string filename) {
 	filename += ".tour";
 	ofstream outputFile;
@@ -872,5 +881,6 @@ void outputSolution(vector<int> &Tour, string filename) {
 	}
 	outputFile.close();
 }
+
 
 
